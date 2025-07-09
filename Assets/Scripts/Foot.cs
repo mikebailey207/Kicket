@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Foot : MonoBehaviour
 {
@@ -9,10 +10,16 @@ public class Foot : MonoBehaviour
     bool kicking = false;
 
     Vector3 startPos;
-    Vector3 endPos;
-    Vector3 mouseWorldPos;
 
-    float kickSpeed = 40;
+    Vector3 mouseWorldPos;
+    [SerializeField]
+    private float kickSpeed = 2;
+    [SerializeField]
+    private float speedMultiplier = 10;
+    [SerializeField]
+    private float maxKickSpeed = 1000;
+    [SerializeField]
+    private float minKickSpeed = 0;
 
     void Start()
     {
@@ -21,7 +28,10 @@ public class Foot : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(0);
+        }
         if (dragging)
         {
             Drag();
@@ -58,6 +68,28 @@ public class Foot : MonoBehaviour
     private void OnMouseUp()
     {
         dragging = false;
+   
+        kickSpeed = CalculateKickSpeed();
         kicking = true;
+    }
+    private float CalculateKickSpeed()
+    {
+        float distance = Vector3.Distance(transform.position, startPos);
+        float kickSpeed = distance * speedMultiplier;
+        return Mathf.Clamp(kickSpeed, minKickSpeed, maxKickSpeed);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Rigidbody2D rb = collision.attachedRigidbody;
+        if (rb != null)
+        {
+            // Calculate direction opposite to the drag direction
+            Vector2 dragDirection = (transform.position - startPos).normalized;
+            Vector2 forceDirection = dragDirection;
+
+            float forceMagnitude = kickSpeed/2; // Adjust force strength as needed
+
+            rb.AddForce(-forceDirection * forceMagnitude, ForceMode2D.Impulse);
+        }
     }
 }
