@@ -1,0 +1,52 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Fielder : MonoBehaviour
+{
+    private Foot foot;
+
+    private Ball ball;
+
+    private float checkDistance = 100;
+    private bool chasing = false;
+
+    private float speed = 15;
+
+    void Start()
+    {
+        foot = FindObjectOfType<Foot>();
+        ball = FindObjectOfType<Ball>();
+    }
+
+    void Update()
+    {
+        if(foot.ballPlayed)
+        {
+            CheckIfBallInRange();
+            Chase();
+        }     
+    }
+
+    void CheckIfBallInRange()
+    {
+        float distance = Vector2.Distance(ball.transform.position, transform.position);
+        Debug.Log(distance);
+        if(distance <= checkDistance)
+        {
+            chasing = true;
+        }
+        else
+        {
+            chasing = false;
+        }
+    }
+
+    void Chase()
+    {
+        if (chasing)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, ball.transform.position, speed * Time.deltaTime);
+        }
+    }
+}

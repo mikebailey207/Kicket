@@ -20,6 +20,10 @@ public class Foot : MonoBehaviour
     private float maxKickSpeed = 1000;
     [SerializeField]
     private float minKickSpeed = 0;
+    [SerializeField]
+    private float forceStrengthAdjuster = 50;
+
+    public bool ballPlayed = false;
 
     void Start()
     {
@@ -51,6 +55,7 @@ public class Foot : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
     }
+
     private void Kick()
     {        
         transform.position = Vector3.MoveTowards(transform.position, startPos, kickSpeed * Time.deltaTime);
@@ -60,11 +65,26 @@ public class Foot : MonoBehaviour
             kicking = false;
         }
     }
+
+    private void KickConnect(Rigidbody2D ballRB)
+    {
+        ballPlayed = true;
+        // Calculate direction opposite to the drag direction
+        Vector2 dragDirection = (transform.position - startPos).normalized;
+        Vector2 forceDirection = dragDirection;
+
+        float forceMagnitude = kickSpeed * forceStrengthAdjuster; // Adjust force strength as needed
+
+        ballRB.AddForce(-forceDirection * forceMagnitude);
+        CameraManager.Instance.CutToBallCam();
+    }
+
     private void OnMouseDown()
     {
         startPos = transform.position;
         dragging = true;
     }
+
     private void OnMouseUp()
     {
         dragging = false;
@@ -72,6 +92,7 @@ public class Foot : MonoBehaviour
         kickSpeed = CalculateKickSpeed();
         kicking = true;
     }
+
     private float CalculateKickSpeed()
     {
         float distance = Vector3.Distance(transform.position, startPos);
@@ -83,13 +104,7 @@ public class Foot : MonoBehaviour
         Rigidbody2D rb = collision.attachedRigidbody;
         if (rb != null)
         {
-            // Calculate direction opposite to the drag direction
-            Vector2 dragDirection = (transform.position - startPos).normalized;
-            Vector2 forceDirection = dragDirection;
-
-            float forceMagnitude = kickSpeed/2; // Adjust force strength as needed
-
-            rb.AddForce(-forceDirection * forceMagnitude, ForceMode2D.Impulse);
+            KickConnect(rb);
         }
     }
 }
