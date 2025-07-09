@@ -76,6 +76,7 @@ public class Foot : MonoBehaviour
         float forceMagnitude = kickSpeed * forceStrengthAdjuster; // Adjust force strength as needed
 
         ballRB.AddForce(-forceDirection * forceMagnitude);
+
         CameraManager.Instance.CutToBallCam();
     }
 
