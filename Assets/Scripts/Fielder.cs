@@ -31,7 +31,7 @@ public class Fielder : MonoBehaviour
     void CheckIfBallInRange()
     {
         float distance = Vector2.Distance(ball.transform.position, transform.position);
-        Debug.Log(distance);
+     
         if(distance <= checkDistance)
         {
             chasing = true;
