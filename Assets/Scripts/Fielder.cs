@@ -11,12 +11,15 @@ public class Fielder : MonoBehaviour
     private float checkDistance = 100;
     private bool chasing = false;
 
+ 
+
     private float speed = 30;
 
     void Start()
     {
         foot = FindObjectOfType<Foot>();
         ball = FindObjectOfType<Ball>();
+      
     }
 
     void Update()
@@ -47,6 +50,15 @@ public class Fielder : MonoBehaviour
         if (chasing)
         {
             transform.position = Vector3.MoveTowards(transform.position, ball.transform.position, speed * Time.deltaTime);
+            //Flip
+            Vector3 scale = transform.localScale;
+
+            if (ball.transform.position.x > transform.position.x)
+                scale.x = -Mathf.Abs(scale.x); // face right
+            else
+                scale.x = Mathf.Abs(scale.x); // face left
+
+            transform.localScale = scale;
         }
     }
 }

@@ -23,7 +23,7 @@ public class Foot : MonoBehaviour
     [SerializeField]
     private float minKickSpeed = 0;
     [SerializeField]
-    private float forceStrengthAdjuster = 50;
+    private float forceStrengthAdjuster = 10;
 
     public bool ballPlayed = false;
 
