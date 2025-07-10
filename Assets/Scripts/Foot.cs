@@ -10,7 +10,7 @@ public class Foot : MonoBehaviour
     public bool landed = false;
     
     private bool kicking = false;
-
+    private LineRenderer lr;
     Vector3 startPos;
 
     Vector3 mouseWorldPos;
@@ -25,10 +25,13 @@ public class Foot : MonoBehaviour
     [SerializeField]
     private float forceStrengthAdjuster = 10;
 
+
+
     public bool ballPlayed = false;
 
     void Start()
     {
+        lr = GetComponent<LineRenderer>();
         startPos = transform.position;
     }
 
@@ -40,6 +43,8 @@ public class Foot : MonoBehaviour
         }
         if (dragging)
         {
+           
+            
             Drag();
         }
         else if (kicking)
@@ -56,6 +61,10 @@ public class Foot : MonoBehaviour
         Vector2 direction = startPos - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+        lr.enabled = true;
+        lr.positionCount = 2;
+        lr.SetPosition(0, startPos);
+        lr.SetPosition(1, mouseWorldPos);
     }
 
     private void Kick()
@@ -123,7 +132,7 @@ public class Foot : MonoBehaviour
     private void OnMouseUp()
     {
         dragging = false;
-   
+        lr.enabled = false;
         kickSpeed = CalculateKickSpeed();
         kicking = true;
     }

@@ -7,6 +7,8 @@ public class Ball : MonoBehaviour
 {
     private Foot foot;
     public bool bowling = false;
+    public bool stoppedByFielder = false;
+
     private bool canSwing = true;
 
     private float bowlingSpeed = 10;
@@ -142,6 +144,7 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Fielder"))
         {
+     
             // BALL is above the fielder – it's still lofted and cannot be interacted with
             if (transform.localScale.x > 2f)
             {
@@ -160,6 +163,7 @@ public class Ball : MonoBehaviour
             if (transform.localScale.x <= 2f && (!foot.lofting || foot.landed))
             {
                 Debug.Log("Fielder stops the ball");
+                stoppedByFielder = true;
                 rb.velocity = Vector2.zero;
                 rb.angularVelocity = 0;
                 bowling = false;

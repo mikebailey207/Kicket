@@ -24,10 +24,21 @@ public class Fielder : MonoBehaviour
 
     void Update()
     {
-        if(foot.ballPlayed)
+        Vector3 scale = transform.localScale;
+
+        if (ball.transform.position.x > transform.position.x)
+            scale.x = -Mathf.Abs(scale.x); // face right
+        else
+            scale.x = Mathf.Abs(scale.x); // face left
+
+        transform.localScale = scale;
+        if (foot.ballPlayed)
         {
             CheckIfBallInRange();
-            Chase();
+            if (!ball.stoppedByFielder)
+            {
+                Chase();
+            }
         }     
     }
 
@@ -51,14 +62,7 @@ public class Fielder : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, ball.transform.position, speed * Time.deltaTime);
             //Flip
-            Vector3 scale = transform.localScale;
-
-            if (ball.transform.position.x > transform.position.x)
-                scale.x = -Mathf.Abs(scale.x); // face right
-            else
-                scale.x = Mathf.Abs(scale.x); // face left
-
-            transform.localScale = scale;
+           
         }
     }
 }
