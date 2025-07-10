@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Ball : MonoBehaviour
 {
@@ -64,8 +65,37 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        rb.velocity = Vector2.zero;
-        rb.angularVelocity = 0;
-        bowling = false;
+        if (collision.gameObject.CompareTag("Foot"))
+        {
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0;
+            bowling = false;
+        }
+        if (collision.gameObject.CompareTag("Fielder"))
+        {
+            // BALL is above the fielder – it's still lofted and cannot be interacted with
+            if (transform.localScale.x > 3f)
+            {
+                return; // ball too high, fielder ignores it
+            }
+
+            // BALL is falling from loft but hasn't bounced yet – caught out
+            if (transform.localScale.x <= 3f && foot.lofting && !foot.landed)
+            {
+                Debug.Log("Caught out!");
+                SceneManager.LoadScene(0);
+                return;
+            }
+
+            // BALL is not lofted or has bounced — fielder stops it
+            if (transform.localScale.x <= 3f && (!foot.lofting || foot.landed))
+            {
+                Debug.Log("Fielder stops the ball");
+                rb.velocity = Vector2.zero;
+                rb.angularVelocity = 0;
+                bowling = false;
+                return;
+            }
+        }
     }
 }

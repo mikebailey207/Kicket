@@ -388,8 +388,8 @@ GameObject:
   - component: {fileID: 43419515}
   - component: {fileID: 43419518}
   m_Layer: 0
-  m_Name: Capsule (4)
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -408,7 +408,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &43419516
 SpriteRenderer:
@@ -537,8 +537,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0.2
-  m_AngularDrag: 0.05
+  m_LinearDrag: 0.5
+  m_AngularDrag: 0.1
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 1
@@ -601,7 +601,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.042452812, b: 0.042452812, a: 1}
   m_FlipX: 0
@@ -844,8 +844,8 @@ GameObject:
   - component: {fileID: 537127391}
   - component: {fileID: 537127394}
   m_Layer: 0
-  m_Name: Capsule (7)
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -864,7 +864,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &537127392
 SpriteRenderer:
@@ -1214,8 +1214,8 @@ GameObject:
   - component: {fileID: 931936770}
   - component: {fileID: 931936773}
   m_Layer: 0
-  m_Name: Capsule (9)
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1234,7 +1234,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &931936771
 SpriteRenderer:
@@ -1328,8 +1328,8 @@ GameObject:
   - component: {fileID: 1038402544}
   - component: {fileID: 1038402547}
   m_Layer: 0
-  m_Name: Capsule (3)
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1348,7 +1348,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &1038402545
 SpriteRenderer:
@@ -1614,8 +1614,8 @@ GameObject:
   - component: {fileID: 1171229483}
   - component: {fileID: 1171229486}
   m_Layer: 0
-  m_Name: Capsule (10)
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1634,7 +1634,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &1171229484
 SpriteRenderer:
@@ -1728,8 +1728,8 @@ GameObject:
   - component: {fileID: 1209105848}
   - component: {fileID: 1209105851}
   m_Layer: 0
-  m_Name: Capsule
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1748,7 +1748,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &1209105849
 SpriteRenderer:
@@ -1889,8 +1889,8 @@ GameObject:
   - component: {fileID: 1295720598}
   - component: {fileID: 1295720601}
   m_Layer: 0
-  m_Name: Capsule (2)
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1909,7 +1909,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &1295720599
 SpriteRenderer:
@@ -2074,8 +2074,8 @@ GameObject:
   - component: {fileID: 1411179467}
   - component: {fileID: 1411179470}
   m_Layer: 0
-  m_Name: Capsule (5)
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2094,7 +2094,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &1411179468
 SpriteRenderer:
@@ -2261,7 +2261,7 @@ GameObject:
   - component: {fileID: 1671033981}
   m_Layer: 0
   m_Name: Foot
-  m_TagString: Untagged
+  m_TagString: Foot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2295,6 +2295,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragging: 0
+  lofting: 0
+  landed: 0
   kickSpeed: 2
   speedMultiplier: 10
   maxKickSpeed: 1000
@@ -2394,8 +2396,8 @@ GameObject:
   - component: {fileID: 1832104862}
   - component: {fileID: 1832104865}
   m_Layer: 0
-  m_Name: Capsule (6)
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2414,7 +2416,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &1832104863
 SpriteRenderer:
@@ -2751,8 +2753,8 @@ GameObject:
   - component: {fileID: 2123008076}
   - component: {fileID: 2123008079}
   m_Layer: 0
-  m_Name: Capsule (1)
-  m_TagString: Untagged
+  m_Name: Fielder
+  m_TagString: Fielder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2771,7 +2773,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.26, y: 0.41}
   m_Direction: 0
 --- !u!212 &2123008077
 SpriteRenderer:

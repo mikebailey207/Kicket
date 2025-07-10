@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 public class Foot : MonoBehaviour
 {
     public bool dragging = false;
-
-    bool kicking = false;
+    public bool lofting = false;
+    public bool landed = false;
+    
+    private bool kicking = false;
 
     Vector3 startPos;
 
@@ -83,7 +85,7 @@ public class Foot : MonoBehaviour
     private IEnumerator LoftBallEffect(Transform ball)
     {
         Vector3 originalScale = ball.localScale;
-        Vector3 loftScale = originalScale * 1.5f;
+        Vector3 loftScale = originalScale * 5f;
         Vector3 bounceScale = originalScale * 1.2f;
 
         float loftTime = 2f;
@@ -94,6 +96,7 @@ public class Foot : MonoBehaviour
         // Drop down
         yield return ScaleOverTime(ball, loftScale, originalScale, loftTime);
         // Bounce once (small scale pop)
+        landed = true;
         yield return ScaleOverTime(ball, originalScale, bounceScale, bounceTime);
         yield return ScaleOverTime(ball, bounceScale, originalScale, bounceTime);
     }
@@ -140,6 +143,7 @@ public class Foot : MonoBehaviour
 
             if (Input.GetKey(KeyCode.Space))
             {
+                lofting = true;
                 StartCoroutine(LoftBallEffect(collision.transform));
             }
         }

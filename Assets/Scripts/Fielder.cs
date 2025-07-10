@@ -11,7 +11,7 @@ public class Fielder : MonoBehaviour
     private float checkDistance = 100;
     private bool chasing = false;
 
-    private float speed = 15;
+    private float speed = 30;
 
     void Start()
     {
