@@ -123,6 +123,7 @@ public class Foot : MonoBehaviour
         target.localScale = end;
     }
 
+
     private void OnMouseDown()
     {
         startPos = transform.position;
@@ -145,16 +146,24 @@ public class Foot : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Rigidbody2D rb = collision.attachedRigidbody;
-        if (rb != null)
+        if (collision.gameObject.CompareTag("Ball"))
         {
-            KickConnect(rb);
-
-            if (Input.GetKey(KeyCode.Space))
+            Rigidbody2D rb = collision.attachedRigidbody;
+            if (rb != null)
             {
-                lofting = true;
-                StartCoroutine(LoftBallEffect(collision.transform));
+                KickConnect(rb);
+
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    lofting = true;
+                    StartCoroutine(LoftBallEffect(collision.transform));
+                }
             }
+        }
+        else if (collision.gameObject.CompareTag("Stump"))
+        {
+            GameManager.Instance.ResetGame();
+            SceneManager.LoadScene(0);
         }
     }
 }

@@ -35,7 +35,7 @@ public class Fielder : MonoBehaviour
         if (foot.ballPlayed)
         {
             CheckIfBallInRange();
-            if (!ball.stoppedByFielder)
+            if (!ball.scored)
             {
                 Chase();
             }
