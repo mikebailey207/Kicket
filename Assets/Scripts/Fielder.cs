@@ -12,7 +12,7 @@ public class Fielder : MonoBehaviour
     private bool chasing = false;
 
  
-
+    [SerializeField]
     private float speed = 30;
 
     void Start()

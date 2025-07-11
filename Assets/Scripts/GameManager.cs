@@ -6,6 +6,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
 
+
     public static GameManager Instance { get; private set; }
 
     [SerializeField]
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI overText;
+
+    [SerializeField]
+    AudioSource firstSound;
 
     private int lastOverShown = -1;
 
@@ -41,7 +45,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        scoreText.text = "Score: " + runsScored.ToString("0") + " NOT OUT";    
+        scoreText.text = "Score: " + runsScored.ToString("0") + " NOT OUT";
+        firstSound.Play();
     }
 
     public void NextBall()
@@ -62,7 +67,7 @@ public class GameManager : MonoBehaviour
     public void ShowNewOverText()
     {
         string bowlerType = isSwingOver ? "Fast-medium" : "Spin";
-        string bowlerName = isSwingOver ? "Anderson" : "Swann"; // or randomise later
+        string bowlerName = isSwingOver ? "Biggs 'Bigs' Bigs" : "Swan 'The Swan' Swann"; // or randomise later
         overText.text = $"New Over\n{bowlerName}, {bowlerType}";
         StartCoroutine(ClearOverText());
     }
@@ -78,7 +83,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ClearOverText()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4.5f);
         overText.text = "";
     }
 
