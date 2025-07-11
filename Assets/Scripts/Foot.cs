@@ -78,7 +78,7 @@ public class Foot : MonoBehaviour
     }
 
     private void KickConnect(Rigidbody2D ballRB)
-    {
+    {     
         ballPlayed = true;
         // Calculate direction opposite to the drag direction
         Vector2 dragDirection = (transform.position - startPos).normalized;
@@ -148,6 +148,7 @@ public class Foot : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
+        
             Rigidbody2D rb = collision.attachedRigidbody;
             if (rb != null)
             {
@@ -158,6 +159,7 @@ public class Foot : MonoBehaviour
                     lofting = true;
                     StartCoroutine(LoftBallEffect(collision.transform));
                 }
+            
             }
         }
         else if (collision.gameObject.CompareTag("Stump"))

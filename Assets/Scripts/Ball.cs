@@ -14,6 +14,16 @@ public class Ball : MonoBehaviour
     private bool canSwing = true;
     private bool canAddScore = true;
 
+    [SerializeField]
+    private Animator bowlerAnim;
+
+    [SerializeField]
+    private Collider2D bowlerCollider;
+
+    [SerializeField]
+    private GameObject bowlerBall;
+
+    private SpriteRenderer spriteRenderer;
 
     private float bowlingSpeed = 10;
     [SerializeField]
@@ -21,10 +31,13 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private float waitForBowlTime = 3;
 
+
     private Rigidbody2D rb;
 
     private int i; // swing chooser
     private float j; // swing force
+    private float angleOffset;
+
     private void Awake()
     {
         foot = FindObjectOfType<Foot>();
@@ -33,7 +46,12 @@ public class Ball : MonoBehaviour
 
     private void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = false;
         StartCoroutine(TurnOnBowl());
+
+        GameManager.Instance.TryShowNewOver();
+
     }
 
     void Update()
@@ -58,7 +76,7 @@ public class Ball : MonoBehaviour
     private IEnumerator TurnOnBowl()
     {
         yield return new WaitForSeconds(waitToSeeFieldTime);
-
+        bowlerAnim.enabled = true;
         CameraManager.Instance.CutToBowlCam();
         yield return new WaitForSeconds(waitForBowlTime);
         bowling = true;
@@ -67,13 +85,34 @@ public class Ball : MonoBehaviour
 
     private void Bowl()
     {
+        bowlerAnim.enabled = false;
+        bowlerBall.SetActive(false);
+        spriteRenderer.enabled = true;
+
         rb.velocity = Vector2.zero;
 
-        // Add strong initial downward impulse
-        rb.AddForce(Vector2.down * bowlingSpeed, ForceMode2D.Impulse);
+        if (GameManager.Instance.isSwingOver)
+        {
+            bowlingSpeed = Random.Range(40, 70);
+        }
+        else
+        {
+            bowlingSpeed = Random.Range(25, 35);
+        }
 
-        // Start swing over time
-        StartCoroutine(SwingInAir());
+        angleOffset = Random.Range(-10f, 10f); // Store angle for later
+        Vector2 direction = Quaternion.Euler(0, 0, angleOffset) * Vector2.down;
+
+        rb.AddForce(direction.normalized * bowlingSpeed, ForceMode2D.Impulse);
+
+        if (GameManager.Instance.isSwingOver)
+        {
+            StartCoroutine(SwingInAir());
+        }
+        else
+        {
+            StartCoroutine(ApplySpinForce());
+        }
 
         bowling = false;
     }
@@ -93,14 +132,15 @@ public class Ball : MonoBehaviour
         }
     }
 
-    private IEnumerator ApplySpinForce() // use this later for spinners
-    {
-        yield return new WaitForSeconds(Random.Range(0.5f, 0.8f));
-        // delay before spinning, hitting ground
+   private IEnumerator ApplySpinForce()
+{
+    yield return new WaitForSeconds(Random.Range(0.5f, 0.8f));
 
-        Vector2 swingDir = (i == 0) ? Vector2.left : Vector2.right;
-        rb.AddForce(swingDir * j, ForceMode2D.Impulse);
-    }
+    // Spin back toward the stumps
+    Vector2 spinDir = angleOffset > 0 ? Vector2.left : Vector2.right;
+
+    rb.AddForce(spinDir * j, ForceMode2D.Impulse);
+}
 
     private void CheckBoundary()
     {
@@ -127,7 +167,7 @@ public class Ball : MonoBehaviour
     {
         Vector2 middlePoint = Vector2.zero;
         float distance = Vector2.Distance(transform.position, middlePoint);
-        //Debug.Log(distance);
+    
         int runs = 0;
 
         if (distance > 175f)
@@ -158,6 +198,7 @@ public class Ball : MonoBehaviour
 
     private void NextBall()
     {
+        GameManager.Instance.NextBall();
         SceneManager.LoadScene(0);
     }
 

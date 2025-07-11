@@ -5,13 +5,25 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+
     public static GameManager Instance { get; private set; }
 
     [SerializeField]
     private TextMeshProUGUI scoreText;
 
+    [SerializeField]
+    private TextMeshProUGUI ballsPlayedText;
+
+    [SerializeField]
+    private TextMeshProUGUI overText;
+
+    private int lastOverShown = -1;
+
     public int runsScored = 0; // Example score variable
     public int ballsPlayed = 0;
+
+    public int currentOver => ballsPlayed / 6;
+    public bool isSwingOver => currentOver % 2 == 0; // true on 0, 2, 4...
 
     public bool batsmanOut = false;
 
@@ -32,18 +44,50 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Score: " + runsScored.ToString("0") + " NOT OUT";    
     }
 
+    public void NextBall()
+    {
+        ballsPlayed++;
+        ballsPlayedText.text = "Ball: " + (ballsPlayed + 1);
+    }
+
     public void AddRuns(int runs)
     {
         runsScored += runs;
-        ballsPlayed++;
+        
         scoreText.text = "Score: " + runsScored.ToString("0") + " NOT OUT";
+      
         Debug.Log("Total runs: {runsScored}, Balls played: {ballsPlayed}");
+    }
+
+    public void ShowNewOverText()
+    {
+        string bowlerType = isSwingOver ? "Fast-medium" : "Spin";
+        string bowlerName = isSwingOver ? "Anderson" : "Swann"; // or randomise later
+        overText.text = $"New Over\n{bowlerName}, {bowlerType}";
+        StartCoroutine(ClearOverText());
+    }
+
+    public void TryShowNewOver()
+    {
+        if (currentOver != lastOverShown)
+        {
+            lastOverShown = currentOver;
+            ShowNewOverText();
+        }
+    }
+
+    private IEnumerator ClearOverText()
+    {
+        yield return new WaitForSeconds(2f);
+        overText.text = "";
     }
 
     public void ResetGame()
     {
-        scoreText.text = "Score: 0 NOT OUT";
         runsScored = 0;
         ballsPlayed = 0;
+        ballsPlayedText.text = "Ball: " + (ballsPlayed + 1);
+        scoreText.text = "Score: 0 NOT OUT";
+    
     }
 }
