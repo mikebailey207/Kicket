@@ -29,7 +29,13 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI fixedTargetText;
 
     [SerializeField]
+    private TextMeshProUGUI pavilionText;
+
+    [SerializeField]
     private TextMeshProUGUI outText;
+
+    [SerializeField]
+    private TextMeshProUGUI staticRoundText;
 
     [SerializeField] private AudioSource firstSound;
     [SerializeField] private AudioSource swannSound;
@@ -86,8 +92,9 @@ public class GameManager : MonoBehaviour
         fixedTargetText.text = "Target: " + target.ToString("0");
         scoreText.text = "Score: " + runsScored.ToString("0") + " NOT OUT";
         targetText.text = "Target: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
-    
-    
+        pavilionText.text = "CHAPS K.C.";
+        staticRoundText.text = "TITHERWALLINGTON CHAPS. QUARTER FINAL.";
+
         Time.timeScale = 0;
     }
 
@@ -262,6 +269,8 @@ public class GameManager : MonoBehaviour
         levelUpSound.Play();
         if(level == 1)
         {
+            pavilionText.text = "RAPSCALLIONS K.C.";
+            staticRoundText.text = "FLETCHINGSWORTH RAPSCALLIONS. SEMI FINAL.";
             target = 50;
             ballsRemaining = 30;
             targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
@@ -272,6 +281,8 @@ public class GameManager : MonoBehaviour
         }
         else if(level == 2)
         {
+            pavilionText.text = "CHUFFS K.C.";
+            staticRoundText.text = "MCVITIE CHUFFS. SEMI FINAL.";
             target = 100;
             ballsRemaining = 48;
             targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";

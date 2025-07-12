@@ -95,8 +95,8 @@ public class Ball : MonoBehaviour
         if (GameManager.Instance.isSwingOver)
         {
             if (GameManager.Instance.level == 1) bowlingSpeed = Random.Range(40, 60);
-            else if (GameManager.Instance.level == 2) bowlingSpeed = Random.Range(40, 70);
-            else bowlingSpeed = Random.Range(40, 80);
+            else if (GameManager.Instance.level == 2) bowlingSpeed = Random.Range(40, 65);
+            else bowlingSpeed = Random.Range(40, 70);
         }
         else
         {

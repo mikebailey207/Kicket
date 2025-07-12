@@ -19,21 +19,17 @@ public class WicketKeeper : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-     /*   if (!chasing && ball.gameObject.transform.position.y <= 3 && !foot.ballPlayed)
+        if (foot.ballPlayed)
         {
-            chasing = true;
-            CameraManager.Instance.CutToBallCam(); // triggers once
+            GetComponent<Collider2D>().enabled = false;
         }
-
-        if (chasing)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, ball.gameObject.transform.position, 50 * Time.deltaTime);
-        }*/
-    }
+    } 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Ball") && !GameManager.Instance.gameOver)
+       
+        if (collision.gameObject.CompareTag("Ball") && !GameManager.Instance.gameOver && !foot.ballPlayed)
         {
+        
             GameManager.Instance.ballsRemaining--;
             GameManager.Instance.NextBall();
           
