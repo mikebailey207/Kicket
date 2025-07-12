@@ -141,13 +141,36 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Total runs: {runsScored}, Balls played: {ballsPlayed}");
     }
-
     public void ShowNewOverText()
     {
-        string bowlerType = isSwingOver ? "Fast-medium" : "Spin";
         string bowlerName = "";
+        string bowlerType = "";
 
-        // Play corresponding voice sound
+        if (isSwingOver)
+        {
+            // Set bowler type by level
+            switch (level)
+            {
+                case 1:
+                    bowlerType = "Medium-fast";
+                    break;
+                case 2:
+                    bowlerType = "Fast-medium";
+                    break;
+                case 3:
+                    bowlerType = "Fast";
+                    break;
+                default:
+                    bowlerType = "Fast-medium";
+                    break;
+            }
+        }
+        else
+        {
+            bowlerType = "Spin";
+        }
+
+        // Set bowler name and play sound
         if (level == 2)
         {
             if (isSwingOver)
@@ -174,7 +197,7 @@ public class GameManager : MonoBehaviour
                 waveyDaveSound.Play();
             }
         }
-        else // Level 1 (default)
+        else // Level 1 or fallback
         {
             if (isSwingOver)
             {
@@ -250,7 +273,7 @@ public class GameManager : MonoBehaviour
         else if(level == 2)
         {
             target = 2;
-            ballsRemaining = 60;
+            ballsRemaining = 48;
             targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
             fixedTargetText.text = "Target: " + target.ToString("0");
             finalScreen.SetActive(true);
