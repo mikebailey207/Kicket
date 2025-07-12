@@ -30,7 +30,7 @@ public class FootMovement : MonoBehaviour
 
     private void Update()
     {
-        if(!foot.dragging)
+        if(!foot.dragging && foot.canKick)
         {
             Vector3 move = new Vector3(moveInput.x, moveInput.y, 0f);
             transform.position += move * moveSpeed * Time.deltaTime;

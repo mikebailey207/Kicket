@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,7 +20,31 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI overText;
 
     [SerializeField]
+    private TextMeshProUGUI runsThisBallText;
+
+    [SerializeField]
+    private TextMeshProUGUI targetText;
+
+    [SerializeField]
+    private TextMeshProUGUI fixedTargetText;
+
+    [SerializeField]
+    private TextMeshProUGUI outText;
+
+    [SerializeField]
     AudioSource firstSound;
+
+    [SerializeField]
+    GameObject quarterFinalScreen;
+
+    [SerializeField]
+    GameObject semiFinalScreen;
+
+    [SerializeField]
+    GameObject finalScreen;
+
+    [SerializeField]
+    private AudioSource levelUpSound;
 
     private int lastOverShown = -1;
 
@@ -30,6 +55,15 @@ public class GameManager : MonoBehaviour
     public bool isSwingOver => currentOver % 2 == 0; // true on 0, 2, 4...
 
     public bool batsmanOut = false;
+    public bool gameOver = false;
+    private bool canLevelUp = true;
+    private bool showingIntro = true;
+
+    public int target = 25;
+
+    public int ballsRemaining = 18;
+
+    public int level = 1;
 
     private void Awake()
     {
@@ -45,12 +79,43 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        fixedTargetText.text = "Target: " + target.ToString("0");
         scoreText.text = "Score: " + runsScored.ToString("0") + " NOT OUT";
-        firstSound.Play();
+        targetText.text = "Target: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
+    
+    
+        Time.timeScale = 0;
+    }
+
+    private void Update()
+    {
+        if(canLevelUp && runsScored >= target)
+        {
+            canLevelUp = false;
+            LevelUp();
+        }
+        if (ballsRemaining <= 0)
+        {
+            ResetGame();
+
+            SceneManager.LoadScene(0);
+        }
+        if(Input.anyKeyDown && showingIntro)
+        {
+            firstSound.Play();
+            Time.timeScale = 1;
+            if (level == 1) quarterFinalScreen.SetActive(false);
+            else if (level == 2) semiFinalScreen.SetActive(false);
+            else finalScreen.SetActive(false);
+            showingIntro = false;
+        }
+
     }
 
     public void NextBall()
     {
+        int runsNeeded = target - runsScored;
+        targetText.text = "RUNS REQUIRED: " + runsNeeded.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
         ballsPlayed++;
         ballsPlayedText.text = "Ball: " + (ballsPlayed + 1);
     }
@@ -58,9 +123,15 @@ public class GameManager : MonoBehaviour
     public void AddRuns(int runs)
     {
         runsScored += runs;
-        
+        ballsRemaining--; // move this up
+
         scoreText.text = "Score: " + runsScored.ToString("0") + " NOT OUT";
-      
+
+       
+
+        int runsNeeded = target - runsScored;
+        targetText.text = "RUNS REQUIRED: " + runsNeeded.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
+
         Debug.Log("Total runs: {runsScored}, Balls played: {ballsPlayed}");
     }
 
@@ -81,18 +152,90 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ShowRunsThisBall(int runs)
+    {
+        if (!gameOver)
+        {
+            runsThisBallText.text = runs.ToString("0") + " runs";
+            StartCoroutine(ClearRunsText());
+        }
+    }
+    public void ShowOutText(string caughtOrBowled)
+    {
+        outText.text = caughtOrBowled;
+        gameOver = true;
+        StartCoroutine(ClearOutText());
+    }
     private IEnumerator ClearOverText()
     {
         yield return new WaitForSeconds(4.5f);
         overText.text = "";
     }
-
-    public void ResetGame()
+    private IEnumerator ClearRunsText()
+    {
+        yield return new WaitForSeconds(3f);
+        runsThisBallText.text = "";
+    }
+    private IEnumerator ClearOutText()
+    {
+        yield return new WaitForSeconds(3f);
+        outText.text = "";
+    }
+    public void LevelUp()
     {
         runsScored = 0;
         ballsPlayed = 0;
         ballsPlayedText.text = "Ball: " + (ballsPlayed + 1);
         scoreText.text = "Score: 0 NOT OUT";
-    
+        levelUpSound.Play();
+        if(level == 1)
+        {
+            target = 50;
+            ballsRemaining = 30;
+            targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
+            fixedTargetText.text = "Target: " + target.ToString("0");
+            semiFinalScreen.SetActive(true);
+            showingIntro = true;
+            Time.timeScale = 0;
+        }
+        else if(level == 2)
+        {
+            target = 100;
+            ballsRemaining = 60;
+            targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
+            fixedTargetText.text = "Target: " + target.ToString("0");
+            finalScreen.SetActive(true);
+            showingIntro = true;
+            Time.timeScale = 0;
+        }
+        level++;
+        SceneManager.LoadScene(0);
+        canLevelUp = true;
+    }
+
+    public void ResetGame()
+    {
+        gameOver = false;
+        runsScored = 0;
+        ballsPlayed = 0;
+        if (level == 1)
+        {
+            ballsRemaining = 18;
+            target = 25;
+        }
+        else if (level == 2)
+        {
+            ballsRemaining = 30;
+            target = 50;
+        }
+        else
+        {
+            ballsRemaining = 60;
+            target = 100;
+        }
+        ballsPlayedText.text = "Ball: " + (ballsPlayed + 1);
+        scoreText.text = "Score: 0 NOT OUT";
+        targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
+
     }
 }

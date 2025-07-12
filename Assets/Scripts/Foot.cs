@@ -8,12 +8,17 @@ public class Foot : MonoBehaviour
     public bool dragging = false;
     public bool lofting = false;
     public bool landed = false;
-    
+    public bool canKick = true;
+
     private bool kicking = false;
+
     private LineRenderer lr;
     Vector3 startPos;
 
     Vector3 mouseWorldPos;
+
+    private AudioSource hitSound;
+
     [SerializeField]
     private float kickSpeed = 2;
     [SerializeField]
@@ -25,13 +30,15 @@ public class Foot : MonoBehaviour
     [SerializeField]
     private float forceStrengthAdjuster = 10;
 
-
+    [SerializeField]
+    private AudioSource dashSound;
 
     public bool ballPlayed = false;
 
     void Start()
     {
         lr = GetComponent<LineRenderer>();
+        hitSound = GetComponent<AudioSource>();
         startPos = transform.position;
     }
 
@@ -49,7 +56,11 @@ public class Foot : MonoBehaviour
         }
         else if (kicking)
         {
-            Kick();
+            if (canKick)
+            {
+               
+                Kick();
+            }
         }
     }
     private void Drag()
@@ -74,12 +85,14 @@ public class Foot : MonoBehaviour
         if (Vector3.Distance(transform.position, startPos) < 0.01f)
         {
             kicking = false;
+            canKick = false;
         }
     }
 
     private void KickConnect(Rigidbody2D ballRB)
     {     
         ballPlayed = true;
+      
         // Calculate direction opposite to the drag direction
         Vector2 dragDirection = (transform.position - startPos).normalized;
         Vector2 forceDirection = dragDirection;
@@ -87,6 +100,8 @@ public class Foot : MonoBehaviour
         float forceMagnitude = kickSpeed * forceStrengthAdjuster; // Adjust force strength as needed
 
         ballRB.AddForce(-forceDirection * forceMagnitude);
+
+        hitSound.Play();
 
         CameraManager.Instance.CutToBallCam();
     }
@@ -136,6 +151,7 @@ public class Foot : MonoBehaviour
         lr.enabled = false;
         kickSpeed = CalculateKickSpeed();
         kicking = true;
+        dashSound.Play();
     }
 
     private float CalculateKickSpeed()
@@ -144,6 +160,14 @@ public class Foot : MonoBehaviour
         float kickSpeed = distance * speedMultiplier;
         return Mathf.Clamp(kickSpeed, minKickSpeed, maxKickSpeed);
     }
+
+    private void HitWicket()
+    {
+        GameManager.Instance.ResetGame();
+
+        SceneManager.LoadScene(0);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Ball"))
@@ -164,8 +188,12 @@ public class Foot : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Stump"))
         {
-            GameManager.Instance.ResetGame();
-            SceneManager.LoadScene(0);
+            GameManager.Instance.ShowOutText("Out hit wicket!");
+
+            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+            rb.AddForce(Vector2.down * 10f, ForceMode2D.Impulse);
+            rb.AddTorque(Random.Range(-5f, 5f), ForceMode2D.Impulse);
+            Invoke("HitWicket", 3);
         }
     }
 }

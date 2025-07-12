@@ -16,12 +16,12 @@ public class Ball : MonoBehaviour
 
     [SerializeField]
     private Animator bowlerAnim;
-
     [SerializeField]
     private Collider2D bowlerCollider;
-
     [SerializeField]
     private GameObject bowlerBall;
+
+    private AudioSource clappingSound;
 
     private SpriteRenderer spriteRenderer;
 
@@ -42,6 +42,7 @@ public class Ball : MonoBehaviour
     {
         foot = FindObjectOfType<Foot>();
         rb = GetComponent<Rigidbody2D>();
+        clappingSound = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -128,6 +129,7 @@ public class Ball : MonoBehaviour
         {
             rb.AddForce(swingDir * swingForce * 40 * Time.deltaTime, ForceMode2D.Force);
             elapsed += Time.deltaTime;
+            bowlerCollider.enabled = true;
             yield return null;
         }
     }
@@ -140,7 +142,8 @@ public class Ball : MonoBehaviour
     Vector2 spinDir = angleOffset > 0 ? Vector2.left : Vector2.right;
 
     rb.AddForce(spinDir * j, ForceMode2D.Impulse);
-}
+        bowlerCollider.enabled = true;
+    }
 
     private void CheckBoundary()
     {
@@ -156,7 +159,9 @@ public class Ball : MonoBehaviour
             scored = true;
             if (canAddScore)
             {
+                GameManager.Instance.ShowRunsThisBall(runs);
                 GameManager.Instance.AddRuns(runs);
+                clappingSound.Play();
                 canAddScore = false;
             }
             Invoke("NextBall", 3);
@@ -190,6 +195,7 @@ public class Ball : MonoBehaviour
         if (canAddScore)
         {
             GameManager.Instance.AddRuns(runs);
+            GameManager.Instance.ShowRunsThisBall(runs);
             canAddScore = false;
         }
         Invoke("NextBall", 3);
@@ -219,7 +225,15 @@ public class Ball : MonoBehaviour
 
           if(collision.gameObject.CompareTag("Stump"))
         {
-            Out();
+            GameManager.Instance.ShowOutText("Bowled!");
+
+            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+            bowlingSpeed *= 0.3f;
+            rb.AddForce(Vector2.down * 20, ForceMode2D.Impulse);
+            rb.AddTorque(Random.Range(-5f, 5f), ForceMode2D.Impulse);
+            clappingSound.Play();
+            Invoke("Out", 3);
+           
         }
       }
   
@@ -238,7 +252,9 @@ public class Ball : MonoBehaviour
             if (transform.localScale.x <= 2f && foot.lofting && !foot.landed)
             {
                 // Debug.Log("Caught out!");
-                Out();
+                GameManager.Instance.ShowOutText("Caught!");
+                clappingSound.Play();
+                Invoke("Out", 3);
                 return;
             }
 
@@ -252,6 +268,7 @@ public class Ball : MonoBehaviour
                 rb.angularVelocity = 0;
                 bowling = false;
                 CheckScore();
+               
                 return;
             }
         }

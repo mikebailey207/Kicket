@@ -32,9 +32,11 @@ public class WicketKeeper : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Ball"))
+        if (collision.gameObject.CompareTag("Ball") && !GameManager.Instance.gameOver)
         {
-            GameManager.Instance.ballsPlayed++;
+            GameManager.Instance.ballsRemaining--;
+            GameManager.Instance.NextBall();
+          
             SceneManager.LoadScene(0);
         }
     }
