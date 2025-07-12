@@ -27348,7 +27348,7 @@ MonoBehaviour:
   ballsPlayed: 0
   batsmanOut: 0
   gameOver: 0
-  target: 2
+  target: 25
   ballsRemaining: 18
   level: 1
 --- !u!4 &792030670

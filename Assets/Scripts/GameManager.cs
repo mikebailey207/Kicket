@@ -262,7 +262,7 @@ public class GameManager : MonoBehaviour
         levelUpSound.Play();
         if(level == 1)
         {
-            target = 2;
+            target = 50;
             ballsRemaining = 30;
             targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
             fixedTargetText.text = "Target: " + target.ToString("0");
@@ -272,7 +272,7 @@ public class GameManager : MonoBehaviour
         }
         else if(level == 2)
         {
-            target = 2;
+            target = 100;
             ballsRemaining = 48;
             targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
             fixedTargetText.text = "Target: " + target.ToString("0");
