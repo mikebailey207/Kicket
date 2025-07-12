@@ -31,8 +31,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI outText;
 
-    [SerializeField]
-    AudioSource firstSound;
+    [SerializeField] private AudioSource firstSound;
+    [SerializeField] private AudioSource swannSound;
+    [SerializeField] private AudioSource geoffSound;
+    [SerializeField] private AudioSource harrySound;
+    [SerializeField] private AudioSource valerieSound;
+    [SerializeField] private AudioSource waveyDaveSound;
 
     [SerializeField]
     GameObject quarterFinalScreen;
@@ -102,11 +106,14 @@ public class GameManager : MonoBehaviour
         }
         if(Input.anyKeyDown && showingIntro)
         {
-            firstSound.Play();
+           
             Time.timeScale = 1;
+            runsThisBallText.text = "";
+            
             if (level == 1) quarterFinalScreen.SetActive(false);
             else if (level == 2) semiFinalScreen.SetActive(false);
             else finalScreen.SetActive(false);
+            ShowNewOverText();
             showingIntro = false;
         }
 
@@ -138,7 +145,49 @@ public class GameManager : MonoBehaviour
     public void ShowNewOverText()
     {
         string bowlerType = isSwingOver ? "Fast-medium" : "Spin";
-        string bowlerName = isSwingOver ? "Biggs 'Bigs' Bigs" : "Swan 'The Swan' Swann"; // or randomise later
+        string bowlerName = "";
+
+        // Play corresponding voice sound
+        if (level == 2)
+        {
+            if (isSwingOver)
+            {
+                bowlerName = "Geoff 'Barbara' Wetherby";
+                geoffSound.Play();
+            }
+            else
+            {
+                bowlerName = "Harry 'Half pint' Grundy";
+                harrySound.Play();
+            }
+        }
+        else if (level == 3)
+        {
+            if (isSwingOver)
+            {
+                bowlerName = "Valerie 'The Thomas' Charlston";
+                valerieSound.Play();
+            }
+            else
+            {
+                bowlerName = "Wavey-Dave 'Colin' Costello";
+                waveyDaveSound.Play();
+            }
+        }
+        else // Level 1 (default)
+        {
+            if (isSwingOver)
+            {
+                bowlerName = "Biggs 'Bigs' Bigs";
+                firstSound.Play();
+            }
+            else
+            {
+                bowlerName = "Swan 'The Swan' Swann";
+                swannSound.Play();
+            }
+        }
+
         overText.text = $"New Over\n{bowlerName}, {bowlerType}";
         StartCoroutine(ClearOverText());
     }
@@ -190,7 +239,7 @@ public class GameManager : MonoBehaviour
         levelUpSound.Play();
         if(level == 1)
         {
-            target = 50;
+            target = 2;
             ballsRemaining = 30;
             targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
             fixedTargetText.text = "Target: " + target.ToString("0");
@@ -200,7 +249,7 @@ public class GameManager : MonoBehaviour
         }
         else if(level == 2)
         {
-            target = 100;
+            target = 2;
             ballsRemaining = 60;
             targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
             fixedTargetText.text = "Target: " + target.ToString("0");
@@ -227,11 +276,13 @@ public class GameManager : MonoBehaviour
         {
             ballsRemaining = 30;
             target = 50;
+  
         }
         else
         {
             ballsRemaining = 60;
             target = 100;
+           
         }
         ballsPlayedText.text = "Ball: " + (ballsPlayed + 1);
         scoreText.text = "Score: 0 NOT OUT";
