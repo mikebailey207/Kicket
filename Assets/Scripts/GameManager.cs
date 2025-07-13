@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource valerieSound;
     [SerializeField] private AudioSource waveyDaveSound;
 
+
     [SerializeField]
     GameObject quarterFinalScreen;
 
@@ -54,7 +55,12 @@ public class GameManager : MonoBehaviour
     GameObject finalScreen;
 
     [SerializeField]
+    GameObject winScreen;
+
+    [SerializeField]
     private AudioSource levelUpSound;
+
+    [SerializeField] GameObject instructionsScreen;
 
     private int lastOverShown = -1;
 
@@ -74,6 +80,8 @@ public class GameManager : MonoBehaviour
     public int ballsRemaining = 18;
 
     public int level = 1;
+
+
 
     private void Awake()
     {
@@ -111,13 +119,18 @@ public class GameManager : MonoBehaviour
 
             SceneManager.LoadScene(0);
         }
-        if(Input.anyKeyDown && showingIntro)
+        if(Input.GetKeyDown(KeyCode.Space) && showingIntro)
         {
            
             Time.timeScale = 1;
             runsThisBallText.text = "";
-            
-            if (level == 1) quarterFinalScreen.SetActive(false);
+
+            if (level == 1)
+            {
+                quarterFinalScreen.SetActive(false);
+                instructionsScreen.SetActive(true);
+                Time.timeScale = 0;
+            }
             else if (level == 2) semiFinalScreen.SetActive(false);
             else finalScreen.SetActive(false);
             ShowNewOverText();
@@ -182,7 +195,7 @@ public class GameManager : MonoBehaviour
         {
             if (isSwingOver)
             {
-                bowlerName = "Geoff 'Barbara' Wetherby";
+                bowlerName = "Geoff 'Babs' Wetherby";
                 geoffSound.Play();
             }
             else
@@ -217,6 +230,8 @@ public class GameManager : MonoBehaviour
                 swannSound.Play();
             }
         }
+
+
 
         overText.text = $"New Over\n{bowlerName}, {bowlerType}";
         StartCoroutine(ClearOverText());
@@ -262,6 +277,11 @@ public class GameManager : MonoBehaviour
     }
     public void LevelUp()
     {
+        if(level == 3)
+        {
+            winScreen.SetActive(true);
+            Time.timeScale = 0;
+        }
         runsScored = 0;
         ballsPlayed = 0;
         ballsPlayedText.text = "Ball: " + (ballsPlayed + 1);
@@ -271,8 +291,8 @@ public class GameManager : MonoBehaviour
         {
             pavilionText.text = "RAPSCALLIONS K.C.";
             staticRoundText.text = "FLETCHINGSWORTH RAPSCALLIONS. SEMI FINAL.";
-            target = 50;
-            ballsRemaining = 30;
+            target = 36;
+            ballsRemaining = 24;
             targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
             fixedTargetText.text = "Target: " + target.ToString("0");
             semiFinalScreen.SetActive(true);
@@ -282,9 +302,9 @@ public class GameManager : MonoBehaviour
         else if(level == 2)
         {
             pavilionText.text = "CHUFFS K.C.";
-            staticRoundText.text = "MCVITIE CHUFFS. SEMI FINAL.";
-            target = 100;
-            ballsRemaining = 48;
+            staticRoundText.text = "MCVITIE CHUFFS. FINAL.";
+            target = 50;
+            ballsRemaining = 30;
             targetText.text = "RUNS REQUIRED: " + target.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";
             fixedTargetText.text = "Target: " + target.ToString("0");
             finalScreen.SetActive(true);
@@ -304,18 +324,18 @@ public class GameManager : MonoBehaviour
         if (level == 1)
         {
             ballsRemaining = 18;
-            target = 25;
+            target = 18;
         }
         else if (level == 2)
         {
-            ballsRemaining = 30;
-            target = 50;
+            ballsRemaining = 24;
+            target = 36;
   
         }
         else
         {
-            ballsRemaining = 60;
-            target = 100;
+            ballsRemaining = 30;
+            target = 50;
            
         }
         ballsPlayedText.text = "Ball: " + (ballsPlayed + 1);

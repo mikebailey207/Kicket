@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Foot : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Foot : MonoBehaviour
     public bool canKick = true;
 
     private bool kicking = false;
+    private bool loftingReady = false;
 
     private LineRenderer lr;
     Vector3 startPos;
@@ -33,6 +35,9 @@ public class Foot : MonoBehaviour
     [SerializeField]
     private AudioSource dashSound;
 
+    [SerializeField]
+    private TextMeshProUGUI spaceText;
+
     public bool ballPlayed = false;
 
     void Start()
@@ -44,9 +49,15 @@ public class Foot : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKey(KeyCode.Space))
         {
-            SceneManager.LoadScene(0);
+            spaceText.text = "LOFTING";
+            spaceText.color = Color.red;
+        }
+        if(Input.GetKeyUp(KeyCode.Space))
+        {
+            spaceText.text = "HOLD SPACE TO LOFT BALL";
+            spaceText.color = Color.white;
         }
         if (dragging)
         {
@@ -180,6 +191,7 @@ public class Foot : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.Space))
                 {
+                  
                     lofting = true;
                     StartCoroutine(LoftBallEffect(collision.transform));
                 }
