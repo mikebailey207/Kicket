@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(canLevelUp && runsScored >= target)
+        if(canLevelUp && runsScored >= target && !gameOver)
         {
             canLevelUp = false;
             LevelUp();

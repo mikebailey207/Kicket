@@ -260,7 +260,8 @@ public class Ball : MonoBehaviour
 
             // BALL is falling from loft but hasn't bounced yet – caught out
             if (transform.localScale.x <= 2f && foot.lofting && !foot.landed)
-            {         
+            {
+                GameManager.Instance.gameOver = true;
                 GameManager.Instance.ShowOutText("Caught!");
                 rb.velocity = Vector2.zero;
                 rb.angularVelocity = 0;
