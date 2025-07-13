@@ -6,13 +6,13 @@ using TMPro;
 
 public class Foot : MonoBehaviour
 {
+    //class to control foot dragging and connecting. Acts on the ball's rigid body on connecting. 
     public bool dragging = false;
     public bool lofting = false;
     public bool landed = false;
     public bool canKick = true;
 
     private bool kicking = false;
-    private bool loftingReady = false;
 
     private LineRenderer lr;
     Vector3 startPos;
@@ -49,6 +49,7 @@ public class Foot : MonoBehaviour
 
     void Update()
     {
+        //whacked this here at the end, not ideal but seemed like an ok place to put it
         if (Input.GetKey(KeyCode.Space))
         {
             spaceText.text = "LOFTING";
@@ -60,22 +61,20 @@ public class Foot : MonoBehaviour
             spaceText.color = Color.white;
         }
         if (dragging)
-        {
-           
-            
+        {                    
             Drag();
         }
         else if (kicking)
         {
             if (canKick)
-            {
-               
+            {             
                 Kick();
             }
         }
     }
     private void Drag()
     {
+        //drag the foot
         mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPos.z = 0f;
         transform.position = mouseWorldPos;
@@ -91,6 +90,7 @@ public class Foot : MonoBehaviour
 
     private void Kick()
     {        
+        //release of foot foot shoots off to perform kick
         transform.position = Vector3.MoveTowards(transform.position, startPos, kickSpeed * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, startPos) < 0.01f)
@@ -102,13 +102,14 @@ public class Foot : MonoBehaviour
 
     private void KickConnect(Rigidbody2D ballRB)
     {     
+        //actually kick the ball
         ballPlayed = true;
       
         // Calculate direction opposite to the drag direction
         Vector2 dragDirection = (transform.position - startPos).normalized;
         Vector2 forceDirection = dragDirection;
 
-        float forceMagnitude = kickSpeed * forceStrengthAdjuster; // Adjust force strength as needed
+        float forceMagnitude = kickSpeed * forceStrengthAdjuster; 
 
         ballRB.AddForce(-forceDirection * forceMagnitude);
 
@@ -119,6 +120,7 @@ public class Foot : MonoBehaviour
 
     private IEnumerator LoftBallEffect(Transform ball)
     {
+        //old school ball gets bigger it is higher a la old school cricket games
         Vector3 originalScale = ball.localScale;
         Vector3 loftScale = originalScale * 5f;
         Vector3 bounceScale = originalScale * 1.2f;
@@ -138,6 +140,7 @@ public class Foot : MonoBehaviour
 
     private IEnumerator ScaleOverTime(Transform target, Vector3 start, Vector3 end, float duration)
     {
+        //actual scaling of ball object
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -167,6 +170,7 @@ public class Foot : MonoBehaviour
 
     private float CalculateKickSpeed()
     {
+        //more power in kick the further the foot starts from the start position before kicking
         float distance = Vector3.Distance(transform.position, startPos);
         float kickSpeed = distance * speedMultiplier;
         return Mathf.Clamp(kickSpeed, minKickSpeed, maxKickSpeed);
@@ -174,6 +178,7 @@ public class Foot : MonoBehaviour
 
     private void HitWicket()
     {
+        //if player hits their own wicket they are out
         GameManager.Instance.ResetGame();
 
         SceneManager.LoadScene(0);

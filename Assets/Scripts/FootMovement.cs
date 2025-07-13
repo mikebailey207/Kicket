@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class FootMovement : MonoBehaviour
 {
+    //very basic WASD movement using newest Unity Input system
     public float moveSpeed = 5f;
     private Vector2 moveInput;
     private Movement inputActions;

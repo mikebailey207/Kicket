@@ -6,7 +6,7 @@ public class ToggleInstructions : MonoBehaviour
 {
     [SerializeField] private GameObject instructionsPanel;
 
-    private bool isShowing = true;
+    private bool isShowing = true; // start true as they turn on at start of first match
 
     void Update()
     {

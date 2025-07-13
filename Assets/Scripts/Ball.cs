@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Ball : MonoBehaviour
 {
+    // Script to handle the ball, deals with scoring and sends to GameManager. A few magic numbers here to clean up before continuing game after jam
     private Foot foot;
 
     public bool bowling = false;
@@ -13,6 +14,11 @@ public class Ball : MonoBehaviour
 
     private bool canSwing = true;
     private bool canAddScore = true;
+
+    private static int boundaryLength = 225;
+    private static int threeLength = 175;
+    private static int twoLength = 125;
+    private static int oneLength = 75;
 
     [SerializeField]
     private Animator bowlerAnim;
@@ -154,7 +160,7 @@ public class Ball : MonoBehaviour
 
         int runs = 0;
 
-        if (distance > 225f)
+        if (distance > boundaryLength)
         {
             // Beyond boundary – check if it was in the air
             runs = (foot.lofting && !foot.landed) ? 6 : 4;
@@ -163,6 +169,7 @@ public class Ball : MonoBehaviour
             {
                 GameManager.Instance.ShowRunsThisBall(runs);
                 GameManager.Instance.AddRuns(runs);
+                clappingSound.pitch = Random.Range(0.8f, 1.2f);
                 clappingSound.Play();
                 canAddScore = false;
             }
@@ -172,20 +179,21 @@ public class Ball : MonoBehaviour
     }
     private void CheckScore()
     {
+       
         Vector2 middlePoint = Vector2.zero;
         float distance = Vector2.Distance(transform.position, middlePoint);
     
         int runs = 0;
 
-        if (distance > 175f)
+        if (distance > threeLength)
         {
             runs = 3;
         }
-        else if (distance > 125f)
+        else if (distance > twoLength)
         {
             runs = 2;
         }
-        else if (distance > 75f)
+        else if (distance > oneLength)
         {
             runs = 1;
         }
@@ -252,20 +260,19 @@ public class Ball : MonoBehaviour
 
             // BALL is falling from loft but hasn't bounced yet – caught out
             if (transform.localScale.x <= 2f && foot.lofting && !foot.landed)
-            {
-                // Debug.Log("Caught out!");
+            {         
                 GameManager.Instance.ShowOutText("Caught!");
+                rb.velocity = Vector2.zero;
+                rb.angularVelocity = 0;
                 clappingSound.Play();
                 Invoke("Out", 3);
                 return;
             }
 
-            // BALL is not lofted or has bounced — fielder stops it
+            // BALL is not lofted or has bounced — fielder stops it - score is added
             if (transform.localScale.x <= 2f && (!foot.lofting || foot.landed))
             {
-              //  Debug.Log("Fielder stops the ball");
                 
-              
                 rb.velocity = Vector2.zero;
                 rb.angularVelocity = 0;
                 bowling = false;

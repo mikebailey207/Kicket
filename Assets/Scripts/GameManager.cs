@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
+    //Gamemanager singleton, handles scoring, Audio and UI. May need rethinking after the jam before continuing.
+    // Think I'll seperate the UI and Audio concerns after the jam into new UIManager and AudioManager classes anyway
 
     public static GameManager Instance { get; private set; }
 
@@ -64,7 +65,7 @@ public class GameManager : MonoBehaviour
 
     private int lastOverShown = -1;
 
-    public int runsScored = 0; // Example score variable
+    public int runsScored = 0; 
     public int ballsPlayed = 0;
 
     public int currentOver => ballsPlayed / 6;
@@ -87,12 +88,12 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // Prevent duplicates
+            Destroy(gameObject); 
             return;
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // Persist between scenes
+        DontDestroyOnLoad(gameObject); 
     }
 
     private void Start()
@@ -127,6 +128,7 @@ public class GameManager : MonoBehaviour
 
             if (level == 1)
             {
+                //show instructions very first time
                 quarterFinalScreen.SetActive(false);
                 instructionsScreen.SetActive(true);
                 Time.timeScale = 0;
@@ -153,8 +155,6 @@ public class GameManager : MonoBehaviour
         ballsRemaining--; // move this up
 
         scoreText.text = "Score: " + runsScored.ToString("0") + " NOT OUT";
-
-       
 
         int runsNeeded = target - runsScored;
         targetText.text = "RUNS REQUIRED: " + runsNeeded.ToString("0") + " FROM " + ballsRemaining.ToString("0") + " BALLS";

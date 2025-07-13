@@ -5,6 +5,7 @@ using Cinemachine;
 
 public class CameraManager : MonoBehaviour
 {
+    // pretty clear what this does
     public static CameraManager Instance;
     [SerializeField]
     CinemachineVirtualCamera bowlingCam;
